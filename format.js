@@ -1,54 +1,36 @@
 /**
  * $format
  * 
- * Formatador de texto
+ * Formatador de texto a funcao curry
  * 
  * @module $format
  * @author Cleber de Moraes Goncalves <cleber.programmer>
  * @example
  * 
- *        $format('Nome: {0}, CPF: {1:999.999.999-99} e Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '98765432100', '25011988']);
+ *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
  * 
  */
-Ninja.module('$format', ['$curry', '$iterator', '$join', '$slice', '$map'], function ($curry, $iterator, $join, $slice, $map) {
+Ninja.module('$format', ['$curry', '$replace'], function ($curry, $replace) {
   
-  function translation(pattern, args) {
-    
-    var hash = {
-      
-      '9': char.bind(null, /[0-9]/),
-      'A': char.bind(null, /[a-zA-Z]/),
-      '#': char.bind(null, /[a-zA-Z0-9]/),
-      
-      '.': gap.bind(null, /[\.]/),
-      ',': gap.bind(null, /[\,]/),
-      ':': gap.bind(null, /[\:]/),
-      '-': gap.bind(null, /[\-]/),
-      '/': gap.bind(null, /[\/]/),
-      '(': gap.bind(null, /[\(]/),
-      ')': gap.bind(null, /[\)]/),
-      ' ': gap.bind(null, /[\ ]/),
-      
-    };
-    
-    function char(regexp, item) {
-      return current(regexp) || mapper(item);
-    }
-    
-    function current(regexp) {
-      return regexp.test(args.next()) ? args.current() : !1;
-    }
-    
-    function gap(regexp, item) {
-      return current(regexp) || (args.prev() && item);
-    }
-    
-    function mapper(item) {
-      return args.hasNext() ? hash[item](item) : null;
-    }
-    
-    return $join($map($slice(pattern), mapper), '');
-    
+  /**
+   * Se o gap tiver uma mascara para formatar seu valor, sera
+   * utilizado o $translation para formatar
+   *
+   * @private
+   * @method solve
+   * @param {Array} args Argumentos que seram substituido pelo gap
+   * @param {String} gap Marcacao
+   * @param {String} i Index do argumento que sera includo no lugar do gap
+   * @param {String} has Se contem uma mascara
+   * @param {String} pattern Mascara para formatar o valor do gap
+   * @return {String} Gap formatado
+   * @example
+   *
+   *        solve(['hi', 'cleber.programmer'], {0}, 0, undefined, undefined);
+   *
+   */
+  function solve(args, gap, i, has, pattern) {
+    return has ? $translation(pattern, args[i] || '') : args[i] || gap;
   }
   
   /**
@@ -61,17 +43,11 @@ Ninja.module('$format', ['$curry', '$iterator', '$join', '$slice', '$map'], func
    * @return {String} Texto formatado
    * @example
    * 
-   *        $format('Nome: {0}, CPF: {1:999.999.999-99} e Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '98765432100', '25011988']);
+   *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
    * 
    */
   function format(a, b) {
-    
-    function solve(gap, index, hasPattern, pattern) {
-      return hasPattern ? translation(pattern, $iterator(b[index] || '')) : b[index] || gap;
-    }
-    
-    return a.replace(/{(\d+)(:(.+?))?}/g, solve);
-    
+    return $replace(a, /{(\d+)(:(.+?))?}/g, $curry(solve)(b));
   };
   
   /**
