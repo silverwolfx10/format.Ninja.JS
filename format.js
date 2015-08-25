@@ -10,7 +10,13 @@
  *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
  * 
  */
-Ninja.module('$format', ['$curry', '$replace'], function ($curry, $replace) {
+Ninja.module('$format', [
+  
+  '$curry',
+  '$replace',
+  '$translation'
+
+], function ($curry, $replace, $translation) {
   
   /**
    * Se o gap tiver uma mascara para formatar seu valor, sera
@@ -46,8 +52,8 @@ Ninja.module('$format', ['$curry', '$replace'], function ($curry, $replace) {
    *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
    * 
    */
-  function format(a, b) {
-    return $replace(a, /{(\d+)(:(.+?))?}/g, $curry(solve)(b));
+  function format(a, b) {debugger;
+    return $replace(a, /{(\d+)(:(.*?))?}/g, solve.bind(null, b));
   };
   
   /**
