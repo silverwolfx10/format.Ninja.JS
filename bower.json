@@ -1,0 +1,27 @@
+{
+  "name": "format.Ninja.JS",
+  "version": "0.0.0",
+  "authors": [
+    "Cleber de Moraes Goncalves <cleber.programmer@hotmail.com>"
+  ],
+  "description": "Formatador de texto",
+  "main": "format.js",
+  "keywords": [
+    "javascript"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Bibizzy/format.Ninja.JS",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Ninja.JS": "*",
+    "concat.Ninja.JS": "*",
+    "replace.Ninja.JS": "*",
+    "translation.Ninja.JS": "*"
+  }
+}

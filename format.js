@@ -10,7 +10,7 @@
  *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
  * 
  */
-Ninja.module('$format', [
+this.Ninja.module('$format', [
   
   '$curry',
   '$replace',
