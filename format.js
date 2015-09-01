@@ -52,7 +52,7 @@ this.Ninja.module('$format', [
    *        $format('Nome: {0}, Data de Nascimento: {2:99/99/9999}', ['cleber.programmer', '25011988']);
    * 
    */
-  function format(a, b) {debugger;
+  function format(a, b) {
     return $replace(a, /{(\d+)(:(.*?))?}/g, solve.bind(null, b));
   };
   
